@@ -19,8 +19,10 @@ public class GameView extends View{
     private int viewHeight;
     private int points = 0;
     private Sprite playerBird;
-    private final int timerInterval = 30;
+    private  int timerInterval = 40;
     private Sprite enemyBird;
+    private int lvl = 1;
+    private  int dot = 0;
 
     public GameView(Context context) {
         super(context);
@@ -62,7 +64,9 @@ public class GameView extends View{
                     continue;
                 }
                 enemyBird.addFrame(new Rect(j*w, i*h, j*w+w, i*w+w));
+
             }
+
         }
     }
 
@@ -85,7 +89,7 @@ public class GameView extends View{
         p.setColor(Color.WHITE);
 
         canvas.drawARGB(250, 127, 199, 255);
-        canvas.drawText(points+"", viewWidth - 100, 70, p);
+        canvas.drawText("Уровень " + lvl + " Очки: " + points+"", viewWidth - 600, 70, p);
         playerBird.draw(canvas);
         enemyBird.draw(canvas);
 
@@ -111,13 +115,27 @@ public class GameView extends View{
 
         if (enemyBird.getX()< - enemyBird.getFrameWidth()) {
             teleportEnemy ();
-            points +=10;
+            points +=20;
         }
 
         if (enemyBird.intersect(playerBird)) {
             teleportEnemy ();
-            points -= 40;
+            points -= 30;
+            if(points < dot && dot == 0)
+            {
+                dot-=50;
+                lvl --;
+                timerInterval -= 10;
+            }
         }
+
+        if(points > dot+50){
+            dot += 50;
+            lvl++;
+            timerInterval += 10;
+        }
+
+
 
     }
 
@@ -139,7 +157,6 @@ public class GameView extends View{
     public boolean onTouchEvent(MotionEvent event) {
         int eventAction = event.getAction();
         if (eventAction == MotionEvent.ACTION_DOWN) {
-            // Движение вверх
             if (event.getY() <
                     playerBird.getBoundingBoxRect().top) {
                 playerBird.setVy(-100);
