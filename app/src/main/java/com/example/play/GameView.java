@@ -11,6 +11,8 @@ import android.os.CountDownTimer;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class GameView extends View{
@@ -49,12 +51,15 @@ public class GameView extends View{
             }
         }
 
+
+
         b = BitmapFactory.decodeResource(getResources(), R.drawable.enemy);
         w = b.getWidth()/5;
         h = b.getHeight()/3;
 
         firstFrame = new Rect(4*w, 0, 5*w, h);
         enemyBird = new Sprite(2000, 250, -300, 0, firstFrame, b);
+
         for (int i = 0; i < 3; i++) {
             for (int j = 4; j >= 0; j--) {
                 if (i ==0 && j == 4) {
@@ -64,7 +69,6 @@ public class GameView extends View{
                     continue;
                 }
                 enemyBird.addFrame(new Rect(j*w, i*h, j*w+w, i*w+w));
-
             }
 
         }
@@ -89,9 +93,10 @@ public class GameView extends View{
         p.setColor(Color.WHITE);
 
         canvas.drawARGB(250, 127, 199, 255);
-        canvas.drawText("Уровень " + lvl + " Очки: " + points+"", viewWidth - 600, 70, p);
+        canvas.drawText("Уровень " + lvl + " Очки: " + points+"", viewWidth - 630, 70, p);
         playerBird.draw(canvas);
         enemyBird.draw(canvas);
+
 
     }
 
@@ -102,8 +107,7 @@ public class GameView extends View{
 
         if (playerBird.getY() + playerBird.getFrameHeight() >
                 viewHeight) {
-            playerBird.setY(viewHeight -
-                    playerBird.getFrameHeight());
+            playerBird.setY(viewHeight - playerBird.getFrameHeight());
             playerBird.setVy(-playerBird.getVy());
             points--;
         }
@@ -121,22 +125,19 @@ public class GameView extends View{
         if (enemyBird.intersect(playerBird)) {
             teleportEnemy ();
             points -= 30;
-            if(points < dot && dot == 0)
+            if(points < dot && dot != 0)
             {
                 dot-=50;
                 lvl --;
-                timerInterval -= 10;
+                timerInterval -= 15;
             }
         }
 
         if(points > dot+50){
             dot += 50;
             lvl++;
-            timerInterval += 10;
+            timerInterval += 15;
         }
-
-
-
     }
 
 
@@ -159,12 +160,12 @@ public class GameView extends View{
         if (eventAction == MotionEvent.ACTION_DOWN) {
             if (event.getY() <
                     playerBird.getBoundingBoxRect().top) {
-                playerBird.setVy(-100);
+                playerBird.setVy(-150);
                 points--;
             }
             else if (event.getY() >
                     (playerBird.getBoundingBoxRect().bottom)) {
-                playerBird.setVy(100);
+                playerBird.setVy(150);
                 points--;
             }
         }

@@ -125,7 +125,7 @@ public class Sprite {
 
     public Rect getBoundingBoxRect () {
         return new Rect((int)x+padding, (int)y+padding, (int)(x +
-                frameWidth - 2 *padding), (int)(y + frameHeight - 2* padding));
+                frameWidth - 6 * padding), (int)(y + frameHeight - 6 * padding));
     }
 
     public boolean intersect (Sprite s) {
